@@ -1,6 +1,12 @@
-FROM maven:alpine
+FROM jenkins/jenkins:lts
 
-RUN apk update && apk upgrade && \
-  apk --update add fontconfig ttf-dejavu bash git openssh openjdk8-jre 
-RUN mkdir -p /data
-WORKDIR /data
+USER root
+
+# Optional: install curl if needed
+RUN apt-get update && apt-get install -y curl
+
+# Switch back to jenkins user
+USER jenkins
+
+# Install the unique-id plugin
+RUN jenkins-plugin-cli --plugins unique-id
